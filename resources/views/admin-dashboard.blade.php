@@ -694,6 +694,218 @@
             .draw-box{ min-height:auto; padding:34px 20px; }
             .inline-form{ grid-template-columns:1fr; }
         }
+        .dashboard-clean-hero{
+    background:
+        radial-gradient(circle at right, rgba(244,197,66,.22), transparent 28%),
+        linear-gradient(135deg,#101a3d,#1f2d66);
+    color:white;
+    border-radius:30px;
+    padding:30px;
+    margin-bottom:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    box-shadow:0 24px 60px rgba(16,26,61,.20);
+}
+
+.dashboard-badge{
+    display:inline-block;
+    background:rgba(244,197,66,.16);
+    color:#f4c542;
+    border:1px solid rgba(244,197,66,.35);
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:14px;
+}
+
+.dashboard-clean-hero h1{
+    margin:0;
+    font-size:34px;
+}
+
+.dashboard-clean-hero p{
+    margin:8px 0 0;
+    color:#dbe3ff;
+}
+
+.dashboard-amount{
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:24px;
+    padding:20px;
+    min-width:280px;
+}
+
+.dashboard-amount span{
+    display:block;
+    color:#dbe3ff;
+    font-size:13px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.dashboard-amount strong{
+    color:#f4c542;
+    font-size:28px;
+}
+
+.dashboard-summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:18px;
+}
+
+.summary-card{
+    background:white;
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 14px 35px rgba(16,26,61,.08);
+    border:1px solid #eef2ff;
+}
+
+.summary-icon{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    background:#eef2ff;
+    display:grid;
+    place-items:center;
+    font-size:24px;
+    margin-bottom:16px;
+}
+
+.summary-card span{
+    display:block;
+    color:#6b7280;
+    font-weight:800;
+    font-size:13px;
+}
+
+.summary-card strong{
+    display:block;
+    color:#101a3d;
+    margin-top:8px;
+    font-size:34px;
+}
+
+.summary-card.success .summary-icon{
+    background:#dcfce7;
+}
+
+.summary-card.warning .summary-icon{
+    background:#fef3c7;
+}
+
+.summary-card.purple .summary-icon{
+    background:#ede9fe;
+}
+
+.dashboard-money-card{
+    background:white;
+    border-radius:28px;
+    padding:26px;
+    box-shadow:0 16px 40px rgba(16,26,61,.09);
+    border:1px solid #eef2ff;
+}
+
+.money-main{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    margin-bottom:18px;
+}
+
+.money-main h2{
+    margin:0;
+    color:#101a3d;
+}
+
+.money-main p{
+    margin:6px 0 0;
+    color:#6b7280;
+}
+
+.money-percent{
+    background:#101a3d;
+    color:#f4c542;
+    font-size:28px;
+    font-weight:900;
+    padding:14px 20px;
+    border-radius:20px;
+}
+
+.progress-track.clean{
+    height:18px;
+    background:#e5e7eb;
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+.money-detail-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.money-detail-grid div{
+    background:#f8fafc;
+    border-radius:18px;
+    padding:16px;
+    border:1px solid #eef2ff;
+}
+
+.money-detail-grid span{
+    display:block;
+    color:#6b7280;
+    font-size:13px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.money-detail-grid strong{
+    color:#101a3d;
+    font-size:18px;
+}
+
+@media(max-width:980px){
+    .dashboard-clean-hero{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .dashboard-amount{
+        width:100%;
+        min-width:0;
+    }
+
+    .dashboard-summary-grid,
+    .money-detail-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:600px){
+    .dashboard-summary-grid,
+    .money-detail-grid{
+        grid-template-columns:1fr;
+    }
+
+    .money-main{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .money-percent{
+        width:100%;
+        text-align:center;
+    }
+}
     </style>
 </head>
 <body>
@@ -745,62 +957,85 @@
             </div>
         @endif
 
-        <section id="dashboard" class="page active">
-            <div class="dashboard-hero">
-                <h1>Dashboard Kupon Gotilon</h1>
+      <section id="dashboard" class="page active">
+    <div class="dashboard-clean-hero">
+        <div>
+            <span class="dashboard-badge">🎟 Gotilon Dashboard</span>
+            <h1>Dashboard Kupon Gotilon</h1>
+            <p>Ringkasan penjualan kupon, pembayaran, dan pemenang.</p>
+        </div>
+
+        <div class="dashboard-amount">
+            <span>Uang Masuk</span>
+            <strong>Rp {{ number_format($paidAmountTotal, 0, ',', '.') }}</strong>
+        </div>
+    </div>
+
+    <div class="dashboard-summary-grid">
+        <div class="summary-card">
+            <div class="summary-icon">🎟</div>
+            <span>Total Kupon</span>
+            <strong>{{ $coupons->count() }}</strong>
+        </div>
+
+        <div class="summary-card success">
+            <div class="summary-icon">✅</div>
+            <span>Kupon Lunas</span>
+            <strong>{{ $coupons->where('payment_status','PAID')->count() }}</strong>
+        </div>
+
+        <div class="summary-card warning">
+            <div class="summary-icon">⏳</div>
+            <span>Belum Lunas</span>
+            <strong>{{ $coupons->whereIn('payment_status',['UNPAID','PARTIAL'])->count() }}</strong>
+        </div>
+
+        <div class="summary-card purple">
+            <div class="summary-icon">🏆</div>
+            <span>Pemenang</span>
+            <strong>{{ $winners->count() }}</strong>
+        </div>
+    </div>
+
+    <div class="dashboard-money-card">
+        <div class="money-main">
+            <div>
+                <h2>Progress Dana Masuk</h2>
+                <p>Target dana dari seluruh kupon penjualan.</p>
             </div>
 
-            <div class="stats">
-                <div class="card stat">Total Kupon <strong>{{ $coupons->count() }}</strong></div>
-                <div class="card stat">Lunas <strong>{{ $coupons->where('payment_status','PAID')->count() }}</strong></div>
-                <div class="card stat">Belum Lunas <strong>{{ $coupons->whereIn('payment_status',['UNPAID','PARTIAL'])->count() }}</strong></div>
-                <div class="card stat">Pemenang <strong>{{ $winners->count() }}</strong></div>
+            <div class="money-percent">
+                {{ $moneyProgress }}%
+            </div>
+        </div>
+
+        <div class="progress-track clean">
+            <div class="progress-fill" style="width: {{ $moneyProgress }}%"></div>
+        </div>
+
+        <div class="money-detail-grid">
+            <div>
+                <span>Target Dana</span>
+                <strong>Rp {{ number_format($targetAmount, 0, ',', '.') }}</strong>
             </div>
 
-            <div class="card money-section">
-                <div class="money-header">
-                    <div>
-                        <h2>Dashboard Uang Masuk</h2>
-                        <p>Rekap target dana dan pembayaran kupon Gotilon.</p>
-                    </div>
-                    <div class="money-badge">
-                        Harga Kupon: Rp 100.000
-                    </div>
-                </div>
-
-                <div class="money-grid">
-                    <div class="money-card">
-                        <span>Target Dana</span>
-                        <strong>Rp {{ number_format($targetAmount, 0, ',', '.') }}</strong>
-                    </div>
-
-                    <div class="money-card highlight">
-                        <span>Uang Masuk</span>
-                        <strong>Rp {{ number_format($paidAmountTotal, 0, ',', '.') }}</strong>
-                    </div>
-
-                    <div class="money-card">
-                        <span>Sisa Target</span>
-                        <strong>Rp {{ number_format($remainingAmount, 0, ',', '.') }}</strong>
-                    </div>
-
-                    <div class="money-card">
-                        <span>Progress</span>
-                        <strong>{{ $moneyProgress }}%</strong>
-                    </div>
-                </div>
-
-                <div class="progress-box">
-                    <div class="progress-info">
-                        <span>Progress Dana Masuk</span>
-                        <span>{{ $moneyProgress }}%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width: {{ $moneyProgress }}%"></div>
-                    </div>
-                </div>
+            <div>
+                <span>Uang Masuk</span>
+                <strong>Rp {{ number_format($paidAmountTotal, 0, ',', '.') }}</strong>
             </div>
-        </section>
+
+            <div>
+                <span>Sisa Target</span>
+                <strong>Rp {{ number_format($remainingAmount, 0, ',', '.') }}</strong>
+            </div>
+
+            <div>
+                <span>Harga Kupon</span>
+                <strong>Rp 100.000</strong>
+            </div>
+        </div>
+    </div>
+</section>
 
         <section id="coupons" class="page">
             <div class="grid-2">
