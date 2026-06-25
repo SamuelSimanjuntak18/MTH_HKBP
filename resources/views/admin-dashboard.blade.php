@@ -747,7 +747,7 @@
 
         <section id="dashboard" class="page active">
             <div class="dashboard-hero">
-                <h1>Dashboard Undian Gereja</h1>
+                <h1>Dashboard Kupon Gotilon</h1>
             </div>
 
             <div class="stats">
