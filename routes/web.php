@@ -5,7 +5,7 @@ use App\Http\Controllers\RaffleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RaffleController::class, 'publicWinners'])->name('public.winners');
-Route::get('/winners', [RaffleController::class, 'publicWinners'])->name('public.winners');
+//Route::get('/winners', [RaffleController::class, 'publicWinners'])->name('public.winners');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [RaffleController::class, 'index'])->name('dashboard');
