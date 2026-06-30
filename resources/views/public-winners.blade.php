@@ -1,442 +1,960 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <title>Daftar Pemenang - Door Prize Gotilon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Door Prize Gotilon</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
-        :root{
-            --navy:#101a3d;
-            --navy-2:#1f2d66;
-            --gold:#f4c542;
-            --gold-soft:#fff4bf;
-            --text:#101a3d;
-            --muted:#6b7280;
-            --border:#e8edf7;
+        .badge-available {
+            background: #f3f4f6;
+            color: #374151;
         }
 
-        *{ box-sizing:border-box; }
-
-        body{
-            margin:0;
-            font-family: Arial, sans-serif;
-            background:
-                radial-gradient(circle at top left, rgba(244,197,66,.35), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(16,26,61,.12), transparent 32%),
-                linear-gradient(135deg,#eef3ff,#f8fafc);
-            min-height:100vh;
-            color:var(--text);
+        .badge-unpaid {
+            background: #fee2e2;
+            color: #b91c1c;
         }
 
-        .container{
-            max-width:1220px;
-            margin:auto;
-            padding:34px 18px 44px;
+        .badge-partial {
+            background: #dbeafe;
+            color: #1d4ed8;
         }
 
-        .hero{
-            background:
-                radial-gradient(circle at 78% 24%, rgba(244,197,66,.28), transparent 28%),
-                radial-gradient(circle at left bottom, rgba(255,255,255,.10), transparent 28%),
-                linear-gradient(135deg,var(--navy),var(--navy-2));
-            color:white;
-            border-radius:34px;
-            padding:34px;
-            box-shadow:0 28px 80px rgba(16,26,61,.24);
-            margin-bottom:24px;
-            display:grid;
-            grid-template-columns:1fr .95fr;
-            align-items:center;
-            gap:28px;
-            overflow:hidden;
-            position:relative;
+        .badge-paid {
+            background: #dcfce7;
+            color: #166534;
         }
 
-        .hero::before{
-            content:"";
-            position:absolute;
-            inset:0;
-            background-image:
-                radial-gradient(circle, rgba(244,197,66,.28) 1px, transparent 1px);
-            background-size:26px 26px;
-            opacity:.18;
-            mask-image:linear-gradient(90deg,#000,transparent 72%);
+        .badge-winner {
+            background: #fef3c7;
+            color: #92400e;
         }
 
-        .hero::after{
-            content:"";
-            position:absolute;
-            width:230px;
-            height:230px;
-            border-radius:50%;
-            background:rgba(244,197,66,.12);
-            left:-90px;
-            bottom:-100px;
+        .badge-cancelled {
+            background: #e5e7eb;
+            color: #4b5563;
         }
 
-        .hero-content{
-            position:relative;
-            z-index:2;
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
         }
 
-        .hero-badge{
-            display:inline-flex;
-            align-items:center;
-            gap:8px;
-            background:rgba(244,197,66,.16);
-            border:1px solid rgba(244,197,66,.38);
-            color:var(--gold);
-            border-radius:999px;
-            padding:10px 14px;
-            font-size:13px;
-            font-weight:900;
-            margin-bottom:18px;
+        .price-tag {
+            background: linear-gradient(135deg, #FFD54F, #F4C542);
+            color: #101a3d;
+            border-radius: 18px;
+            padding: 18px 28px;
+            text-align: center;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .18);
+            position: relative;
+            min-width: 250px;
         }
 
-        .hero .icon{
-            font-size:64px;
-            margin-bottom:10px;
-            filter:drop-shadow(0 12px 22px rgba(0,0,0,.28));
+        .price-tag::before {
+            content: "";
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 18px;
+            background: #9ca3af;
         }
 
-        .hero h1{
-            margin:0;
-            font-size:46px;
-            line-height:1.12;
-            letter-spacing:-.03em;
+        .price-tag::after {
+            content: "";
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background: #374151;
+            border-radius: 50%;
         }
 
-        .hero h1 span{
-            color:var(--gold);
+        .price-label {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            font-weight: 700;
+            opacity: .8;
         }
 
-        .hero p{
-            color:#dbe3ff;
-            font-size:17px;
-            line-height:1.7;
-            margin:18px 0 24px;
-            max-width:540px;
+        .price-tag h3 {
+            margin: 8px 0;
+            font-size: 36px;
+            font-weight: 900;
         }
 
-        .hero-actions{
-            display:flex;
-            gap:12px;
-            align-items:center;
-            max-width:640px;
+        .price-tag small {
+            font-size: 13px;
+            opacity: .9;
         }
 
-        .search{
-            flex:1;
-            padding:15px 17px;
-            border-radius:16px;
-            border:1px solid #dbe1ef;
-            font-size:15px;
-            outline:none;
-            box-shadow:0 10px 24px rgba(0,0,0,.08);
+        .winner-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
-        .search:focus{
-            border-color:var(--gold);
-            box-shadow:0 0 0 4px rgba(244,197,66,.20);
+        .winner-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 22px;
+            border-radius: 22px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+            transition: .25s;
         }
 
-        .login-btn{
-            background:linear-gradient(135deg,var(--gold),#ffb21c);
-            color:var(--navy);
-            text-decoration:none;
-            font-weight:900;
-            padding:15px 18px;
-            border-radius:16px;
-            white-space:nowrap;
-            box-shadow:0 12px 28px rgba(244,197,66,.25);
+        .winner-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
         }
 
-        .hero-image-wrap{
-            position:relative;
-            z-index:2;
-            border-radius:30px;
-            padding:12px;
-            background:rgba(255,255,255,.08);
-            border:1px solid rgba(255,255,255,.16);
-            box-shadow:0 26px 70px rgba(0,0,0,.30);
+        .winner-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFD54F, #FFB300);
+            font-size: 32px;
+            margin-right: 18px;
+            flex-shrink: 0;
         }
 
-        .hero-image{
-            width:100%;
-            display:block;
-            border-radius:24px;
-            animation:floatPrize 4s ease-in-out infinite;
+        .winner-detail {
+            flex: 1;
         }
 
-        @keyframes floatPrize{
-            0%,100%{ transform:translateY(0); }
-            50%{ transform:translateY(-8px); }
+        .winner-prize {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #6b7280;
+            margin-bottom: 5px;
         }
 
-        .section-title{
-            display:flex;
-            justify-content:space-between;
-            align-items:end;
-            gap:14px;
-            margin:22px 4px 16px;
+        .winner-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #101a3d;
+            margin-bottom: 5px;
         }
 
-        .section-title h2{
-            margin:0;
-            font-size:26px;
-            color:var(--navy);
+        .winner-info {
+            font-size: 14px;
+            color: #6b7280;
         }
 
-        .section-title p{
-            margin:6px 0 0;
-            color:var(--muted);
+        .winner-time {
+            text-align: right;
+            font-weight: 700;
+            color: #101a3d;
+            min-width: 130px;
         }
 
-        .winner-count{
-            background:#fff;
-            border:1px solid var(--border);
-            border-radius:999px;
-            padding:10px 14px;
-            font-weight:900;
-            color:var(--navy);
-            box-shadow:0 10px 24px rgba(16,26,61,.08);
-            white-space:nowrap;
+        .winner-time small {
+            color: #6b7280;
+            font-weight: 500;
         }
 
-        .winner-grid{
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:18px;
+        .table-search {
+            width: 320px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #dbe2ee;
+            font-size: 15px;
+            outline: none;
         }
 
-        .winner-card{
-            background:rgba(255,255,255,.94);
-            border-radius:26px;
-            padding:22px;
-            box-shadow:0 16px 40px rgba(16,26,61,.10);
-            border:1px solid #eef2ff;
-            position:relative;
-            overflow:hidden;
-            transition:.2s ease;
+        .table-search:focus {
+            border-color: #101a3d;
         }
 
-        .winner-card:hover{
-            transform:translateY(-4px);
-            box-shadow:0 24px 54px rgba(16,26,61,.15);
+        .table-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .05);
         }
 
-        .winner-card::after{
-            content:"";
-            position:absolute;
-            width:120px;
-            height:120px;
-            border-radius:50%;
-            background:rgba(244,197,66,.16);
-            right:-40px;
-            top:-40px;
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .winner-card::before{
-            content:"🏆";
-            position:absolute;
-            right:18px;
-            top:18px;
-            font-size:24px;
-            z-index:2;
-            opacity:.9;
+        .modern-table thead {
+            background: #101a3d;
+            color: white;
         }
 
-        .prize{
-            color:var(--muted);
-            font-weight:900;
-            font-size:13px;
-            text-transform:uppercase;
-            letter-spacing:.08em;
-            position:relative;
-            z-index:2;
-            padding-right:42px;
+        .modern-table th {
+            padding: 18px;
+            text-align: left;
+            font-size: 14px;
         }
 
-        .coupon{
-            font-size:44px;
-            font-weight:900;
-            color:var(--navy);
-            margin:12px 0;
-            position:relative;
-            z-index:2;
+        .modern-table td {
+            padding: 18px;
+            border-bottom: 1px solid #eef2ff;
+            vertical-align: middle;
         }
 
-        .name{
-            font-size:21px;
-            font-weight:900;
-            margin-bottom:8px;
-            position:relative;
-            z-index:2;
+        .modern-table tbody tr {
+            transition: .2s;
         }
 
-        .meta{
-            color:var(--muted);
-            font-size:14px;
-            line-height:1.6;
-            position:relative;
-            z-index:2;
+        .modern-table tbody tr:hover {
+            background: #f8fbff;
         }
 
-        .empty{
-            background:white;
-            border-radius:28px;
-            padding:48px 28px;
-            text-align:center;
-            color:var(--muted);
-            box-shadow:0 16px 40px rgba(16,26,61,.08);
-            border:1px solid #eef2ff;
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .empty-icon{
-            font-size:58px;
-            margin-bottom:12px;
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #101a3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
 
-        .empty h2{
-            margin:0 0 8px;
-            color:var(--navy);
+        .badge {
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
         }
 
-        @media(max-width:980px){
-            .hero{
-                grid-template-columns:1fr;
-                text-align:center;
+        .badge-type {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-partial {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-unpaid {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge-winner {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .progress {
+            height: 8px;
+            margin: 6px 0;
+            background: #eef2ff;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress div {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        .empty-table {
+            padding: 60px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        :root {
+            --primary: #101a3d;
+            --primary2: #1d2d67;
+            --gold: #F4C542;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --border: #e5e7eb;
+            --bg: #f5f7fb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: #111827;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        /***************************** HEADER *****************************/
+        .hero {
+            background: linear-gradient(135deg, #101a3d, #24387e);
+            border-radius: 30px;
+            padding: 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
+        }
+
+        .hero:before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .05);
+            right: -120px;
+            top: -120px;
+        }
+
+        .hero-left {
+            max-width: 720px;
+            z-index: 2;
+        }
+
+        .hero-left h1 {
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .hero-left h1 span {
+            color: var(--gold);
+        }
+
+        .hero-left p {
+            font-size: 17px;
+            line-height: 1.8;
+            opacity: .9;
+            margin-bottom: 25px;
+        }
+
+        .hero-right {
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-right img {
+            width: 330px;
+            max-width: 100%;
+        }
+
+        .login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #f4c542, #ffbf00);
+            padding: 14px 28px;
+            font-weight: 700;
+            border-radius: 14px;
+            color: #101a3d;
+            text-decoration: none;
+            transition: .25s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /***************************** INFO CARD *****************************/
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-top: 35px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+            border: 1px solid #edf0f7;
+            transition: .25s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .info-card small {
+            display: block;
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .info-card h2 {
+            font-size: 28px;
+            color: #101a3d;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, #F4C542, #FFD54F);
+            color: #101a3d;
+        }
+
+        .price-card small {
+            color: #4b5563;
+        }
+
+        .price-card h2 {
+            font-size: 34px;
+        }
+
+        /***************************** TAB *****************************/
+        .tab-wrapper {
+            margin-top: 40px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            border: none;
+            background: white;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            border: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: #101a3d;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            color: #101a3d;
+        }
+
+        .section-title p {
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        @media(max-width:1100px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .hero-content{
-                text-align:center;
-            }
-
-            .hero p{
-                margin-left:auto;
-                margin-right:auto;
-            }
-
-            .hero-actions{
-                margin:auto;
-            }
-
-            .winner-grid{
-                grid-template-columns:repeat(2,1fr);
+            .hero {
+                flex-direction: column;
+                text-align: center;
             }
         }
 
-        @media(max-width:600px){
-            .container{
-                padding:22px 14px 34px;
+        @media(max-width:700px) {
+            .container {
+                padding: 20px;
             }
 
-            .hero{
-                padding:26px 18px;
-                border-radius:28px;
+            .hero-left h1 {
+                font-size: 34px;
             }
 
-            .hero h1{
-                font-size:32px;
+            .info-grid {
+                grid-template-columns: 1fr;
             }
 
-            .hero p{
-                font-size:15px;
-            }
-
-            .hero-actions{
-                flex-direction:column;
-            }
-
-            .search,.login-btn{
-                width:100%;
-            }
-
-            .winner-grid{
-                grid-template-columns:1fr;
-            }
-
-            .section-title{
-                flex-direction:column;
-                align-items:flex-start;
+            .tab-wrapper {
+                flex-direction: column;
             }
         }
     </style>
+
 </head>
+
 <body>
 
-<div class="container">
-    <div class="hero">
-        <div class="hero-content">
-            <div class="icon">🏆</div>
+    <div class="container">
 
-            <h1>
-                Daftar Pemenang<br>
-                <span>Door Prize Gotilon</span>
-            </h1>
-            <div class="hero-actions">
-                <input class="search" id="searchWinner" placeholder="Cari nama, nomor kupon, atau hadiah...">
-                <a href="{{ route('login') }}" class="login-btn">Login Admin</a>
+        <div class="hero">
+
+            <div class="hero-left">
+
+                <h1>
+
+                    Door Prize
+
+                    <span>Gotilon</span>
+
+                </h1>
+
+                <p>
+
+                    Selamat datang di Portal Informasi Door Prize Gotilon.
+
+                    Peserta dapat melihat daftar kupon yang telah terjual,
+
+                    memastikan data pembelian telah tercatat oleh panitia,
+
+                    serta melihat daftar pemenang setelah proses pengundian selesai.
+
+                </p>
+
+                <a href="{{ route('login') }}" class="login-btn">
+
+                    🔐 Login Admin
+
+                </a>
+
             </div>
-        </div>
 
-        <div class="hero-image-wrap">
-            <img
-                src="{{ asset('images/hadiah-utama.png') }}"
-                class="hero-image"
-                alt="Hadiah Door Prize Gotilon">
-        </div>
-    </div>
+            <div class="hero-right">
 
-    <div class="section-title">
-        <div>
-            <h2>Riwayat Pemenang</h2>
-            <p>Daftar pemenang akan otomatis bertambah setelah proses pengundian dilakukan.</p>
-        </div>
-
-        <div class="winner-count">
-            Total Pemenang: {{ $winners->count() }}
-        </div>
-    </div>
-
-    @if($winners->count() > 0)
-        <div class="winner-grid" id="winnerGrid">
-            @foreach($winners as $winner)
-                <div class="winner-card"
-                     data-search="{{ strtolower($winner->prize_name.' '.$winner->coupon->coupon_number.' '.$winner->coupon->buyer_name) }}">
-                    <div class="prize">{{ $winner->prize_name }}</div>
-                    <div class="coupon">#{{ $winner->coupon->coupon_number }}</div>
-                    <div class="name">{{ $winner->coupon->buyer_name }}</div>
-                    <div class="meta">
-                        Waktu:
-                        {{ \Carbon\Carbon::parse($winner->drawn_at)->addHours(7)->format('d M Y H:i:s') }} WIB
-                    </div>
+                <div class="hero-image-wrap">
+                    <img src="{{ asset('images/hadiah-utama.png') }}" class="hero-image" alt="Hadiah Utama">
                 </div>
-            @endforeach
+
+                <div class="price-tag">
+
+                    <span class="price-label">
+                        🎟 Harga Kupon/Lembar
+                    </span>
+
+                    <h3>Rp100.000</h3>
+
+                </div>
+
+            </div>
+
         </div>
-    @else
-        <div class="empty">
-            <div class="empty-icon">🎁</div>
-            <h2>Belum Ada Pemenang</h2>
-            <p>Daftar pemenang akan tampil setelah proses pengundian dilakukan.</p>
+
+        <div class="tab-wrapper">
+
+            <button class="tab-btn active" data-tab="couponTab">
+
+                🎟 Kupon Terjual
+
+            </button>
+
+            <button class="tab-btn" data-tab="winnerTab">
+
+                🏆 Daftar Pemenang
+
+            </button>
+
         </div>
-    @endif
-</div>
+        <!-- ==========================
+TAB : KUPON TERJUAL
+========================== -->
 
-<script>
-    const searchInput = document.getElementById('searchWinner');
+        <div id="couponTab" class="tab-content active">
 
-    if(searchInput){
-        searchInput.addEventListener('input', function(){
-            const keyword = this.value.toLowerCase();
+            <div class="section-title">
 
-            document.querySelectorAll('.winner-card').forEach(card => {
-                card.style.display = card.dataset.search.includes(keyword) ? 'block' : 'none';
+                <div>
+                    <h2>Daftar Kupon Terjual</h2>
+                    <p>
+                        Gunakan kolom pencarian untuk memastikan data kupon Anda telah tercatat oleh panitia.
+                    </p>
+                </div>
+
+                <input id="couponSearch" type="text" placeholder="Cari nomor kupon, nama pembeli, PIC..."
+                    class="table-search">
+
+            </div>
+
+
+            <div class="table-card">
+
+                <table class="modern-table" id="couponTable">
+
+                    <thead>
+                        <tr>
+                            <th>No Kupon</th>
+                            <th>Jenis</th>
+                            <th>PIC Panitia</th>
+                            <th>Pembeli</th>
+                            <th>Pembayaran</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @forelse($soldCoupons as $coupon)
+                            <tr
+                                data-search="{{ strtolower(
+                                    ($coupon->coupon_number ?? '') .
+                                        ' ' .
+                                        ($coupon->owner_name ?? '') .
+                                        ' ' .
+                                        ($coupon->buyer_name ?? '') .
+                                        ' ' .
+                                        ($coupon->buyer_phone ?? ''),
+                                ) }}">
+
+                                <td>
+
+                                    <strong>
+
+                                        #{{ $coupon->coupon_number }}
+
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="badge badge-type">
+
+                                        {{ $coupon->coupon_type }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="user-info">
+
+                                        <div class="avatar">
+
+                                            {{ strtoupper(substr($coupon->owner_name ?? '?', 0, 1)) }}
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+
+                                                {{ $coupon->owner_name ?? '-' }}
+
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    <strong>{{ $coupon->buyer_name }}</strong>
+                                </td>
+
+
+                                <td>
+                                    <strong>{{ $coupon->buyer_name }}</strong>
+                                </td>
+
+
+                                <td>
+                                    @php
+                                        $statusMap = [
+                                            'AVAILABLE' => 'Tersedia',
+                                            'UNPAID' => 'Belum Lunas',
+                                            'PARTIAL' => 'Dicicil',
+                                            'PAID' => 'Lunas',
+                                            'WINNER' => 'Menang',
+                                            'CANCELLED' => 'Dibatalkan',
+                                        ];
+
+                                        $statusClass = [
+                                            'AVAILABLE' => 'available',
+                                            'UNPAID' => 'unpaid',
+                                            'PARTIAL' => 'partial',
+                                            'PAID' => 'paid',
+                                            'WINNER' => 'winner',
+                                            'CANCELLED' => 'cancelled',
+                                        ];
+                                    @endphp
+
+                                    <span
+                                        class="badge badge-{{ $statusClass[$coupon->payment_status] ?? 'available' }}">
+                                        {{ $statusMap[$coupon->payment_status] ?? $coupon->payment_status }}
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="6">
+
+                                    <div class="empty-table">
+
+                                        <div style="font-size:55px">
+
+                                            🎟
+
+                                        </div>
+
+                                        <h3>
+
+                                            Belum Ada Kupon Terjual
+
+                                        </h3>
+
+                                        <p>
+
+                                            Data kupon akan muncul setelah panitia melakukan input pembelian.
+
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+        <!-- ==========================
+TAB : DAFTAR PEMENANG
+========================== -->
+
+        <div id="winnerTab" class="tab-content">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>Daftar Pemenang Door Prize</h2>
+
+                    <p>
+                        Seluruh pemenang yang telah diumumkan panitia.
+                    </p>
+
+                </div>
+
+                <input id="winnerSearch" class="table-search" type="text"
+                    placeholder="Cari hadiah, nama atau nomor kupon...">
+
+            </div>
+
+            @if ($winners->count())
+
+                <div class="winner-list">
+
+                    @foreach ($winners as $winner)
+                        <div class="winner-item"
+                            data-search="{{ strtolower($winner->prize_name . ' ' . $winner->coupon->coupon_number . ' ' . $winner->coupon->buyer_name) }}">
+
+                            <div class="winner-icon">
+
+                                🏆
+
+                            </div>
+
+                            <div class="winner-detail">
+
+                                <div class="winner-prize">
+
+                                    {{ $winner->prize_name }}
+
+                                </div>
+
+                                <div class="winner-name">
+
+                                    {{ $winner->coupon->buyer_name }}
+
+                                </div>
+
+                                <div class="winner-info">
+
+                                    Kupon
+                                    <strong>
+
+                                        #{{ $winner->coupon->coupon_number }}
+
+                                    </strong>
+
+                                    •
+
+                                    PIC
+
+                                    <strong>
+
+                                        {{ $winner->coupon->owner_name }}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="winner-time">
+
+                                {{ \Carbon\Carbon::parse($winner->drawn_at)->addHours(7)->format('d M Y') }}
+
+                                <br>
+
+                                <small>
+
+                                    {{ \Carbon\Carbon::parse($winner->drawn_at)->addHours(7)->format('H:i') }} WIB
+
+                                </small>
+
+                            </div>
+
+                        </div>
+                    @endforeach
+
+                </div>
+            @else
+                <div class="empty-table">
+
+                    <div style="font-size:60px">
+
+                        🎁
+
+                    </div>
+
+                    <h3>
+
+                        Belum Ada Pemenang
+
+                    </h3>
+
+                    <p>
+
+                        Daftar pemenang akan muncul setelah proses pengundian dilakukan.
+
+                    </p>
+
+                </div>
+
+            @endif
+
+        </div>
+
+        <script>
+            // =======================
+            // TAB
+            // =======================
+
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+
+                btn.onclick = function() {
+
+                    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+                    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+                    this.classList.add("active");
+
+                    document.getElementById(this.dataset.tab).classList.add("active");
+
+                }
+
             });
-        });
-    }
-</script>
 
-</body>
-</html>
+
+            // =======================
+            // SEARCH KUPON
+            // =======================
+
+            const couponSearch = document.getElementById("couponSearch");
+
+            couponSearch?.addEventListener("keyup", function() {
+
+                const key = this.value.toLowerCase();
+
+                document.querySelectorAll("#couponTable tbody tr").forEach(row => {
+
+                    if (!row.dataset.search) return;
+
+                    row.style.display = row.dataset.search.includes(key) ? "" : "none";
+
+                });
+
+            });
+
+
+            // =======================
+            // SEARCH PEMENANG
+            // =======================
+
+            const winnerSearch = document.getElementById("winnerSearch");
+
+            winnerSearch?.addEventListener("keyup", function() {
+
+                const key = this.value.toLowerCase();
+
+                document.querySelectorAll(".winner-item").forEach(card => {
+
+                    card.style.display = card.dataset.search.includes(key) ? "flex" : "none";
+
+                });
+
+            });
+        </script>

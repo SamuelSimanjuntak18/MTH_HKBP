@@ -9,6 +9,30 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 
     <style>
+        .primary.disabled{
+    background:#9ca3af;
+    cursor:not-allowed;
+    opacity:.7;
+}
+        .action-edit-btn.disabled{
+    background:#e5e7eb;
+    color:#9ca3af;
+    cursor:not-allowed;
+    border:none;
+    opacity:.8;
+}
+
+.action-edit-btn.disabled:hover{
+    transform:none;
+    box-shadow:none;
+}
+        button:disabled{
+    background:#d1d5db;
+    color:#6b7280;
+    cursor:not-allowed;
+    opacity:.7;
+    box-shadow:none;
+}
         .pic-master-card{
     background:
         radial-gradient(circle at right top, rgba(244,197,66,.20), transparent 30%),
@@ -2960,9 +2984,12 @@ grid-template-columns:1fr;
 
             <form method="POST" action="{{ route('coupons.generateReward') }}">
                 @csrf
-                <button class="secondary full-btn">
-                    Generate Kupon Reward
-                </button>
+ <button
+    class="primary"
+    {{ !$canGenerateReward ? 'disabled' : '' }}
+>
+    🎁 Generate Reward Coupon
+</button>
             </form>
         </div>
     </div>
@@ -3124,24 +3151,54 @@ grid-template-columns:1fr;
                                 {{ $coupon->input_by ?? '-' }}
                             </span>
                         </td>
+<td class="text-right">
 
-                        <td class="text-right">
-                            <button
-                                type="button"
-                                class="action-edit-btn"
-                                onclick="openEditModal(
-                                    '{{ $coupon->id }}',
-                                    '{{ e($coupon->coupon_number) }}',
-                                    '{{ e($coupon->owner_name) }}',
-                                    '{{ e($coupon->buyer_name) }}',
-                                    '{{ e($coupon->buyer_phone) }}',
-                                    '{{ $coupon->paid_amount }}',
-                                    '{{ e($coupon->input_by) }}',
-                                    '{{ e($coupon->note) }}'
-                                )">
-                                Edit
-                            </button>
-                        </td>
+@php
+    $canEdit =
+        !empty($coupon->owner_name) &&
+        in_array($coupon->payment_status, ['AVAILABLE','UNPAID','PARTIAL']);
+@endphp
+
+@if($canEdit)
+
+<button
+    type="button"
+    class="action-edit-btn"
+    onclick="openEditModal(
+        '{{ $coupon->id }}',
+        '{{ e($coupon->coupon_number) }}',
+        '{{ e($coupon->owner_name) }}',
+        '{{ e($coupon->buyer_name) }}',
+        '{{ e($coupon->buyer_phone) }}',
+        '{{ $coupon->paid_amount }}',
+        '{{ e($coupon->input_by) }}',
+        '{{ e($coupon->note) }}'
+    )">
+    Edit
+</button>
+
+@else
+
+<button
+    class="action-edit-btn disabled"
+    disabled
+    title="
+@if(empty($coupon->owner_name))
+Kupon belum memiliki PIC.
+@elseif($coupon->payment_status=='PAID')
+Kupon sudah lunas.
+@elseif($coupon->payment_status=='WINNER')
+Kupon sudah menjadi pemenang.
+@elseif($coupon->payment_status=='CANCELLED')
+Kupon telah dibatalkan.
+@endif
+">
+    🔒 Edit
+</button>
+
+@endif
+
+</td>
                     </tr>
                 @endforeach
 
@@ -3482,8 +3539,23 @@ grid-template-columns:1fr;
             @csrf
             <input name="prize_name" placeholder="Nama Hadiah" style="max-width:400px;text-align:center">
             <br>
-            <button type="button" class="primary" id="drawButton" onclick="spinDraw()">🎰 Mulai Undian</button>
-        </form>
+@if($canDraw)
+    <button
+        type="button"
+        class="primary"
+        id="drawButton"
+        onclick="spinDraw()">
+        🎰 Mulai Undian
+    </button>
+@else
+    <button
+        type="button"
+        class="primary disabled"
+        disabled
+        title="Masih ada kupon yang belum lunas">
+        🔒 Mulai Undian
+    </button>
+@endif        </form>
     </div>
 </section>
 
